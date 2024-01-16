@@ -1,10 +1,12 @@
 package org.roko.dls.sublock;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 public class Sublock {
 
+    @Id
     private String id;
     private boolean locked;
     private long timestamp;
