@@ -5,11 +5,10 @@ import org.roko.dls.sublock.service.SublockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/v1/sublock")
@@ -22,8 +21,8 @@ public class SublockController {
         this.svc = svc;
     }
 
-    @PostMapping("/lock/{lockId}}")
-    public ResponseEntity<String> lock(@PathParam("lockId")String lockId) {
+    @PostMapping("/{lockId}")
+    public ResponseEntity<String> lock(@PathVariable("lockId")String lockId) {
         SublockLockResult lockResult = svc.lock(lockId);
 
         if (lockResult == SublockLockResult.OK) {
