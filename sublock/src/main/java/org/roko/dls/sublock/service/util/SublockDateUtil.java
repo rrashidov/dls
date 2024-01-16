@@ -3,6 +3,9 @@ package org.roko.dls.sublock.service.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SublockDateUtil {
 
     private static final String SUBLOCK_DATEFLAG_FORMAT = "yyyyMMdd";
