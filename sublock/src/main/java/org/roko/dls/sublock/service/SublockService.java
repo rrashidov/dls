@@ -2,7 +2,7 @@ package org.roko.dls.sublock.service;
 
 import java.util.Optional;
 
-import org.roko.dls.sublock.Sublock;
+import org.roko.dls.sublock.model.Sublock;
 import org.roko.dls.sublock.repository.SublockRepository;
 import org.roko.dls.sublock.service.util.SublockDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,7 +13,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.dls.sublock.Sublock;
+import org.roko.dls.sublock.model.Sublock;
 import org.roko.dls.sublock.repository.SublockRepository;
 import org.roko.dls.sublock.service.util.SublockDateUtil;
 
