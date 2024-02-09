@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-public class RESTSublockClientTest {
+public class SublockClientTest {
 
     @Mock
     private RestTemplate restTemplateMock;
@@ -27,7 +27,7 @@ public class RESTSublockClientTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        sublockClient = new RESTSublockClient(restTemplateMock);
+        sublockClient = new SublockClient(restTemplateMock);
     }
 
     @Test
