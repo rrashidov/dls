@@ -1,0 +1,4 @@
+FROM sapmachine:17-jre-ubuntu
+
+RUN apt update
+RUN apt install curl -y

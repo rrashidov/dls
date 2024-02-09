@@ -1,0 +1,5 @@
+FROM erp.commonjava:0.0.1
+
+COPY api.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
