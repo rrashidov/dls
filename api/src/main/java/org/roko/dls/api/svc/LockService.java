@@ -7,7 +7,9 @@ import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LockService {
 
     private DistributedLockClient lockClient;
