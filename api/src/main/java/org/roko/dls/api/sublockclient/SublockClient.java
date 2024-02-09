@@ -17,7 +17,7 @@ public class SublockClient {
 
     public void lock(String id) throws AlreadyLockedException, LockFailedException {
         try  {
-            restTemplate.postForObject("/api/v1/sublock/" + id, null, Void.class);
+            restTemplate.postForObject("/api/v1/sublock/" + id, null, String.class);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().is4xxClientError()) {
                 throw new AlreadyLockedException();

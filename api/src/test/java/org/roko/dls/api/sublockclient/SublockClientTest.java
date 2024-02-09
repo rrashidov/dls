@@ -34,13 +34,13 @@ public class SublockClientTest {
     public void lockSendsProperRequest() throws AlreadyLockedException, LockFailedException {
         sublockClient.lock("test-id");
 
-        verify(restTemplateMock).postForObject("/api/v1/sublock/test-id", null, Void.class);
+        verify(restTemplateMock).postForObject("/api/v1/sublock/test-id", null, String.class);
     }
 
     @Test
     public void lockThrowsAlreadyLockedException_whenBackendReturns4xxResponse(){
         // given
-        when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, Void.class))
+        when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
 
         // when - then
@@ -50,7 +50,7 @@ public class SublockClientTest {
     @Test
     public void lockThrowsLockFailedException_whenBackendReturns5xxResponse(){
         // given
-        when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, Void.class))
+        when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
         // when - then
