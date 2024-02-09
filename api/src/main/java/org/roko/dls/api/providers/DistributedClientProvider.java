@@ -35,9 +35,7 @@ public class DistributedClientProvider {
         List<SublockClient> sublockClients = sublockClientConfigObject.getSublockClients().stream()
                 .map(c -> {
                     RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-                    restTemplateBuilder.rootUri(c.getRootUri());
-
-                    return new SublockClient(restTemplateBuilder.build());
+                    return new SublockClient(restTemplateBuilder.rootUri(c.getRootUri()).build());
                 })
                 .collect(Collectors.toList());
 
