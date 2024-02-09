@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.UnlockResult;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LockResultPolicy {
 
     public LockResult inspectLockResults(List<LockResult> lockResults) {
