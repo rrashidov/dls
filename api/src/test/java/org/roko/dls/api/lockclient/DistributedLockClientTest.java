@@ -1,15 +1,15 @@
 package org.roko.dls.api.lockclient;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.doThrow;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.dls.api.lockclient.util.LockResultPolicy;
 import org.roko.dls.api.sublockclient.SublockClient;
 import org.roko.dls.api.sublockclient.exc.AlreadyLockedException;
 import org.roko.dls.api.sublockclient.exc.LockFailedException;
@@ -27,75 +27,81 @@ public class DistributedLockClientTest {
     @Mock
     private SublockClient subLockClient3;
 
-    private LockClient lockClient;
+    private DistributedLockClient lockClient;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        lockClient = new DistributedLockClient(Arrays.asList(subLockClient1, subLockClient2, subLockClient3), new LockResultPolicy());
+        lockClient = new DistributedLockClient(Arrays.asList(subLockClient1, subLockClient2, subLockClient3));
     }
 
     @Test
-    public void lockSucceeds_whenAllSublocksSucceed() throws AlreadyLockedException, LockFailedException {
+    public void lockReturnsAllOKResults_whenAllSubclientsSucceed(){
         // given
-        // any sublock client throws any exception
-        
-        // when
-        LockResult lockResult = lockClient.lock(TEST_ID);
-
-        // then
-        assertEquals(LockResult.OK, lockResult);
-    }
-
-    @Test
-    public void lockSucceeds_whenQuorumOfSublocksSucceed() throws AlreadyLockedException, LockFailedException,
-            org.roko.dls.api.sublockclient.exc.AlreadyLockedException,
-            org.roko.dls.api.sublockclient.exc.LockFailedException {
-        // given
-        doThrow(new AlreadyLockedException()).when(subLockClient3).lock(TEST_ID);
+        // none of the sublock clients throw any exceptions
 
         // when
-        LockResult lockResult = lockClient.lock(TEST_ID);
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertEquals(LockResult.OK, lockResult);
+        assertFalse(lockResults.contains(LockResult.LOCK_FAILED));
+        assertFalse(lockResults.contains(LockResult.ALREADY_LOCKED));
     }
 
     @Test
-    public void lockThrowsAlreadyLockedException_whenQuorumOfSublocksThrowAlreadyLockedException() throws AlreadyLockedException, LockFailedException{
+    public void lockReturnsAllFailedResults_whenAllSubclientsFail() throws AlreadyLockedException, LockFailedException{
+        // given
+        doThrow(new LockFailedException()).when(subLockClient1).lock(TEST_ID);
+        doThrow(new LockFailedException()).when(subLockClient2).lock(TEST_ID);
+        doThrow(new LockFailedException()).when(subLockClient3).lock(TEST_ID);
+
+        // when
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
+
+        // then
+        assertFalse(lockResults.contains(LockResult.OK));
+        assertFalse(lockResults.contains(LockResult.ALREADY_LOCKED));
+    }
+
+    @Test
+    public void lockReturnsAllAlreadyLockedResults_whenAllSubclientsReturnAlreadyLocked() throws AlreadyLockedException, LockFailedException{
         // given
         doThrow(new AlreadyLockedException()).when(subLockClient1).lock(TEST_ID);
         doThrow(new AlreadyLockedException()).when(subLockClient2).lock(TEST_ID);
+        doThrow(new AlreadyLockedException()).when(subLockClient3).lock(TEST_ID);
 
         // when
-        LockResult lockResult = lockClient.lock(TEST_ID);
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertEquals(LockResult.ALREADY_LOCKED, lockResult);
+        assertFalse(lockResults.contains(LockResult.OK));
+        assertFalse(lockResults.contains(LockResult.LOCK_FAILED));
     }
 
     @Test
-    public void unlockSucceeds_whenAllSublocksSucceed() {
+    public void unlockReturnsAllOKResults_whenAllSubclientsSucceed(){
         // given
-        // no sublock client throws any exception
-        
+        // none of the sublock clients throw any exceptions
+
         // when
-        UnlockResult unlockResult = lockClient.unlock(TEST_ID);
+        List<UnlockResult> unlockResults = lockClient.unlock(TEST_ID);
 
         // then
-        assertEquals(UnlockResult.OK, unlockResult);
+        assertFalse(unlockResults.contains(UnlockResult.UNLOCK_FAILED));
     }
 
     @Test
-    public void unlockThrowsUnlockFailedException_whenQuorumOfSublocksThrowUnlockFailedException() throws LockFailedException {
+    public void unlockReturnsAllFailedResults_whenAllSubclientsFail() throws AlreadyLockedException, LockFailedException{
         // given
         doThrow(new LockFailedException()).when(subLockClient1).unlock(TEST_ID);
         doThrow(new LockFailedException()).when(subLockClient2).unlock(TEST_ID);
+        doThrow(new LockFailedException()).when(subLockClient3).unlock(TEST_ID);
 
         // when
-        UnlockResult unlockResult = lockClient.unlock(TEST_ID);
+        List<UnlockResult> unlockResults = lockClient.unlock(TEST_ID);
 
         // then
-        assertEquals(UnlockResult.UNLOCK_FAILED, unlockResult);
+        assertFalse(unlockResults.contains(UnlockResult.OK));
     }
+
 }
