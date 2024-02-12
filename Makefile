@@ -53,3 +53,28 @@ containerize: build
 	@rm ./docker/sublock.jar
 	@rm ./docker/api.jar
 	@echo "Finished cleaning up after container images are built"
+
+# ==================================================================================== #
+# Local dev/setup
+# ==================================================================================== #
+
+## start-locally: starts the dls setup locally
+.PHONY: start-locally
+start-locally: containerize
+	@echo "Start dls setup locally"
+	@docker compose -f ./docker/docker-compose.yml --project-name dls-local up -d 
+	@echo "dls is up and running locally. You can access it at http://localhost:12000"
+
+## stop-locally: stops the dls setup locally
+.PHONY: stop-locally
+stop-locally: 
+	@echo "Stop dls setup locally"
+	@docker compose -f ./docker/docker-compose.yml --project-name dls-local down 
+	@echo "dls stopped"
+
+## clean-local-data: cleans any data created on the local setup
+.PHONY: clean-local-data
+clean-local-data: 
+	@echo "Clean local dls data"
+	@docker compose -f ./docker/docker-compose.yml --project-name dls-local down -v
+	@echo "Finished cleaning local dls data"

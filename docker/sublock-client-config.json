@@ -1,0 +1,13 @@
+{
+	"sublockClients" : [
+		{
+			"rootUri" : "http://sublock1:8080"
+		},
+		{
+			"rootUri" : "http://sublock2:8080"
+		},
+		{
+			"rootUri" : "http://sublock3:8080"
+		}
+	]
+}
