@@ -4,6 +4,7 @@ import org.roko.dls.api.sublockclient.exc.AlreadyLockedException;
 import org.roko.dls.api.sublockclient.exc.LockFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 public class SublockClient {
@@ -23,6 +24,8 @@ public class SublockClient {
                 throw new AlreadyLockedException();
             }
 
+            throw new LockFailedException();
+        } catch (RestClientException e) {
             throw new LockFailedException();
         }
     }

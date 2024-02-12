@@ -14,6 +14,7 @@ import org.roko.dls.api.sublockclient.exc.AlreadyLockedException;
 import org.roko.dls.api.sublockclient.exc.LockFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 public class SublockClientTest {
@@ -52,6 +53,16 @@ public class SublockClientTest {
         // given
         when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        // when - then
+        assertThrows(LockFailedException.class, () -> sublockClient.lock("test-id"));
+    }
+
+    @Test
+    public void lockThrowsLockFailedException_whenBackendThrowsRestException(){
+        // given
+        when(restTemplateMock.postForObject("/api/v1/sublock/test-id", null, String.class))
+            .thenThrow(new RestClientException(""));
 
         // when - then
         assertThrows(LockFailedException.class, () -> sublockClient.lock("test-id"));
