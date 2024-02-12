@@ -3,6 +3,7 @@ package org.roko.dls.api.providers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +36,15 @@ public class DistributedClientProvider {
         List<SublockClient> sublockClients = sublockClientConfigObject.getSublockClients().stream()
                 .map(c -> {
                     RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-                    return new SublockClient(restTemplateBuilder.rootUri(c.getRootUri()).build());
+                    return new SublockClient(restTemplateBuilder
+                        .rootUri(c.getRootUri())
+                        .setConnectTimeout(Duration.ofSeconds(c.getReadTimeout()))
+                        .setReadTimeout(Duration.ofSeconds(c.getReadTimeout()))
+                        .build());
                 })
                 .collect(Collectors.toList());
 
         return new DistributedLockClient(sublockClients);
     }
+
 }

@@ -1,13 +1,19 @@
 {
 	"sublockClients" : [
 		{
-			"rootUri" : "http://sublock1:8080"
+			"rootUri" : "http://sublock1:8080",
+			"connectTimeout" : "2",
+			"readTimeout" : "2"
 		},
 		{
-			"rootUri" : "http://sublock2:8080"
+			"rootUri" : "http://sublock2:8080",
+			"connectTimeout" : "2",
+			"readTimeout" : "2"
 		},
 		{
-			"rootUri" : "http://sublock3:8080"
+			"rootUri" : "http://sublock3:8080",
+			"connectTimeout" : "2",
+			"readTimeout" : "2"
 		}
 	]
 }
