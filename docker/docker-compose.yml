@@ -51,6 +51,40 @@ services:
       timeout: 30s
       retries: 30
       start_period: 30s
+  mysql4:
+    image: mysql:8.1.0
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-dls}"
+      - "MYSQL_USER=${MYSQL_USER:-dls}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-dls}"
+    networks: 
+      - my-shared-network
+    volumes:
+      - mysql-data-4:/var/lib/mysql
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=${MYSQL_ROOT_PASSWORD:-root} --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 30s
+      retries: 30
+      start_period: 30s
+  mysql5:
+    image: mysql:8.1.0
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-dls}"
+      - "MYSQL_USER=${MYSQL_USER:-dls}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-dls}"
+    networks: 
+      - my-shared-network
+    volumes:
+      - mysql-data-5:/var/lib/mysql
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=${MYSQL_ROOT_PASSWORD:-root} --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 30s
+      retries: 30
+      start_period: 30s
   sublock1:
     image: dls.sublock:0.0.1
     environment:
@@ -78,6 +112,24 @@ services:
     depends_on:
       mysql3:
         condition: service_healthy
+  sublock4:
+    image: dls.sublock:0.0.1
+    environment:
+      - DB_URL=jdbc:mysql://mysql4:3306
+    networks: 
+      - my-shared-network
+    depends_on:
+      mysql4:
+        condition: service_healthy
+  sublock5:
+    image: dls.sublock:0.0.1
+    environment:
+      - DB_URL=jdbc:mysql://mysql4:3306
+    networks: 
+      - my-shared-network
+    depends_on:
+      mysql5:
+        condition: service_healthy
   api:
     image: dls.api:0.0.1
     ports:
@@ -95,4 +147,6 @@ networks:
 volumes:
   mysql-data-1: {}
   mysql-data-2: {}
-  mysql-data-3: {}    
+  mysql-data-3: {}
+  mysql-data-4: {}    
+  mysql-data-5: {}    
