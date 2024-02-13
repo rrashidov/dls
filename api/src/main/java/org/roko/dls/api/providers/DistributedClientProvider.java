@@ -36,7 +36,7 @@ public class DistributedClientProvider {
         List<SublockClient> sublockClients = sublockClientConfigObject.getSublockClients().stream()
                 .map(c -> {
                     RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-                    return new SublockClient(restTemplateBuilder
+                    return new SublockClient(c.getId(), restTemplateBuilder
                         .rootUri(c.getRootUri())
                         .setConnectTimeout(Duration.ofSeconds(c.getReadTimeout()))
                         .setReadTimeout(Duration.ofSeconds(c.getReadTimeout()))

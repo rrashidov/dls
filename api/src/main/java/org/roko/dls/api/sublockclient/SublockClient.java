@@ -2,17 +2,17 @@ package org.roko.dls.api.sublockclient;
 
 import org.roko.dls.api.sublockclient.exc.AlreadyLockedException;
 import org.roko.dls.api.sublockclient.exc.LockFailedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 public class SublockClient {
 
+    private String id;
     private RestTemplate restTemplate;
 
-    @Autowired
-    public SublockClient(RestTemplate restTemplate) {
+    public SublockClient(String id, RestTemplate restTemplate) {
+        this.id = id;
         this.restTemplate = restTemplate;
     }
 

@@ -2,6 +2,7 @@ package org.roko.dls.api.providers.config;
 
 public class SublockClientConfig {
 
+    private String id;
     private String rootUri;
     private int connectTimeout;
     private int readTimeout;
@@ -28,6 +29,14 @@ public class SublockClientConfig {
 
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

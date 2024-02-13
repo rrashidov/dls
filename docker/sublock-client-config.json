@@ -1,26 +1,31 @@
 {
 	"sublockClients" : [
 		{
+			"id" : "sublock1",
 			"rootUri" : "http://sublock1:8080",
 			"connectTimeout" : "2",
 			"readTimeout" : "2"
 		},
 		{
+			"id" : "sublock2",
 			"rootUri" : "http://sublock2:8080",
 			"connectTimeout" : "2",
 			"readTimeout" : "2"
 		},
 		{
+			"id" : "sublock3",
 			"rootUri" : "http://sublock3:8080",
 			"connectTimeout" : "2",
 			"readTimeout" : "2"
 		},
 		{
+			"id" : "sublock4",
 			"rootUri" : "http://sublock4:8080",
 			"connectTimeout" : "2",
 			"readTimeout" : "2"
 		},
 		{
+			"id" : "sublock5",
 			"rootUri" : "http://sublock5:8080",
 			"connectTimeout" : "2",
 			"readTimeout" : "2"

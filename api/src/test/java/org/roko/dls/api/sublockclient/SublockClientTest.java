@@ -28,7 +28,7 @@ public class SublockClientTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        sublockClient = new SublockClient(restTemplateMock);
+        sublockClient = new SublockClient("test-id", restTemplateMock);
     }
 
     @Test
