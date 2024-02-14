@@ -124,7 +124,7 @@ services:
   sublock5:
     image: dls.sublock:0.0.1
     environment:
-      - DB_URL=jdbc:mysql://mysql4:3306
+      - DB_URL=jdbc:mysql://mysql5:3306
     networks: 
       - my-shared-network
     depends_on:
