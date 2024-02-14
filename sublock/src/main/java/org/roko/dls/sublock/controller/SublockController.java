@@ -2,9 +2,11 @@ package org.roko.dls.sublock.controller;
 
 import org.roko.dls.sublock.service.SublockLockResult;
 import org.roko.dls.sublock.service.SublockService;
+import org.roko.dls.sublock.service.SublockUnlockResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +36,14 @@ public class SublockController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
     }
 
+    @DeleteMapping("/{lockId}")
+    public HttpStatus unlock(@PathVariable("lockId")String lockId) {
+        SublockUnlockResult unlockResult = svc.unlock(lockId);
+
+        if (unlockResult == SublockUnlockResult.OK) {
+            return HttpStatus.OK;
+        }
+
+        return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
 }
