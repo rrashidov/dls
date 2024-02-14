@@ -3,6 +3,8 @@ package org.roko.dls.sublock.service;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.Optional;
@@ -104,5 +106,63 @@ public class SublockServiceTest {
 
         assertEquals(SublockLockResult.OK, lockResult, "Lock result should be OK when lock exists but is not locked");
     }
-    
+
+    @Test
+    public void unlockSucceeds_whenLockDoesNotExist() {
+        // given
+        when(repoMock.findById("test-lock-id")).thenReturn(Optional.empty());
+
+        // when
+        SublockUnlockResult lockResult = svc.unlock("test-lock-id");
+
+        // then
+        assertEquals(SublockUnlockResult.OK, lockResult, "Unlock result should be OK when lock does not exist");
+    }
+
+    @Test
+    public void unlockMarksSublockEntityAsUnlocked_whenSublockEntityExistsAndIsLocked() {
+        // given
+        Sublock existingSublock = new Sublock();
+        existingSublock.setId("test-lock-id");
+        existingSublock.setLocked(true);
+        existingSublock.setTimestamp(System.currentTimeMillis());
+        existingSublock.setDateFlag(TEST_DATEFLAG);
+
+        when(repoMock.findById("test-lock-id")).thenReturn(Optional.of(existingSublock));
+
+        // when
+        SublockUnlockResult unlockResult = svc.unlock("test-lock-id");
+
+        // then
+        verify(repoMock).save(sublockCaptor.capture());
+        Sublock updatedSublock = sublockCaptor.getValue();
+
+        assertEquals("test-lock-id", updatedSublock.getId(), "Sublock id should be equal to 'test-lock-id'");
+        assertEquals(false, updatedSublock.isLocked(), "Sublock should be unlocked");
+        assertNotEquals(0, updatedSublock.getTimestamp(), "Sublock timestamp should not be equal to 0");
+        assertEquals(TEST_DATEFLAG, updatedSublock.getDateFlag(), "Sublock date flag should be equal to " + TEST_DATEFLAG);
+
+        assertEquals(SublockUnlockResult.OK, unlockResult, "Unlock result should be OK when sublock entity exists");
+    }
+
+    @Test
+    public void unlockDoesNothing_whenSublockEntityExistsAndIsUnlocked(){
+        // given
+        Sublock existingSublock = new Sublock();
+        existingSublock.setId("test-lock-id");
+        existingSublock.setLocked(false);
+        existingSublock.setTimestamp(System.currentTimeMillis());
+        existingSublock.setDateFlag(TEST_DATEFLAG);
+
+        when(repoMock.findById("test-lock-id")).thenReturn(Optional.of(existingSublock));
+
+        // when
+        SublockUnlockResult unlockResult = svc.unlock("test-lock-id");
+
+        // then
+        verify(repoMock).findById("test-lock-id");
+        verify(repoMock, never()).save(any(Sublock.class));
+
+        assertEquals(SublockUnlockResult.OK, unlockResult, "Unlock result should be OK when sublock entity exists");
+    }
 }

@@ -44,4 +44,19 @@ public class SublockService {
             return SublockLockResult.OK;
         }
     }
+
+    public SublockUnlockResult unlock(String string) {
+        Optional<Sublock> sublockOptional = repo.findById(string);
+
+        if (sublockOptional.isPresent()) {
+            Sublock sublock = sublockOptional.get();
+            if (sublock.isLocked()) {
+                sublock.setLocked(false);
+                repo.save(sublock);
+                return SublockUnlockResult.OK;
+            }
+        }
+
+        return SublockUnlockResult.OK;
+    }
 }
