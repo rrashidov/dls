@@ -69,12 +69,5 @@ start-locally: containerize
 .PHONY: stop-locally
 stop-locally: 
 	@echo "Stop dls setup locally"
-	@docker compose -f ./docker/docker-compose.yml --project-name dls-local down 
-	@echo "dls stopped"
-
-## clean-local-data: cleans any data created on the local setup
-.PHONY: clean-local-data
-clean-local-data: 
-	@echo "Clean local dls data"
 	@docker compose -f ./docker/docker-compose.yml --project-name dls-local down -v
-	@echo "Finished cleaning local dls data"
+	@echo "dls stopped"
