@@ -33,7 +33,7 @@ public class SublockClient {
     public void unlock(String id) throws LockFailedException {
         try {
             restTemplate.delete("/api/v1/sublock/" + id);
-        } catch (HttpClientErrorException e) {
+        } catch (RestClientException e) {
             throw new LockFailedException();
         }
     }

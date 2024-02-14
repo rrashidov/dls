@@ -84,4 +84,14 @@ public class SublockClientTest {
         // when - then
         assertThrows(LockFailedException.class, () -> sublockClient.unlock("test-id"));
     }
+
+    @Test
+    public void unlockFails_whenBackednReturnsRestClientException(){
+        // given
+        doThrow(new RestClientException("")).when(restTemplateMock)
+                .delete("/api/v1/sublock/test-id");
+
+        // when - then
+        assertThrows(LockFailedException.class, () -> sublockClient.unlock("test-id"));
+    }
 }
