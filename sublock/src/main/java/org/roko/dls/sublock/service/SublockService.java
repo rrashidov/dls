@@ -2,6 +2,7 @@ package org.roko.dls.sublock.service;
 
 import java.util.Optional;
 
+import org.roko.dls.sublock.dto.SublockRequest;
 import org.roko.dls.sublock.model.Sublock;
 import org.roko.dls.sublock.repository.SublockRepository;
 import org.roko.dls.sublock.service.util.SublockDateUtil;
@@ -43,6 +44,31 @@ public class SublockService {
             repo.save(sublock);
             return SublockLockResult.OK;
         }
+    }
+
+    public SublockLockResult lock(SublockRequest request) {
+        Optional<Sublock> sublockOptional = repo.findById(request.getId());
+
+        if (sublockOptional.isPresent()) {
+            Sublock sublock = sublockOptional.get();
+            if (sublock.isLocked()) {
+                return SublockLockResult.ALREADY_LOCKED;
+            } else {
+                sublock.setLocked(true);
+                sublock.setTimestamp(request.getTimestamp());
+                sublock.setDateFlag(util.getDateFlag());
+                repo.save(sublock);
+            }
+        } else {
+            Sublock sublock = new Sublock();
+            sublock.setId(request.getId());
+            sublock.setLocked(true);
+            sublock.setTimestamp(request.getTimestamp());
+            sublock.setDateFlag(util.getDateFlag());
+            repo.save(sublock);
+        }
+
+        return SublockLockResult.OK;
     }
 
     public SublockUnlockResult unlock(String string) {
