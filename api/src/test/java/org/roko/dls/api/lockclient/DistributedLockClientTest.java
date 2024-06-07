@@ -41,11 +41,11 @@ public class DistributedLockClientTest {
         // none of the sublock clients throw any exceptions
 
         // when
-        List<LockResult> lockResults = lockClient.lock(TEST_ID);
+        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResult.LOCK_FAILED));
-        assertFalse(lockResults.contains(LockResult.ALREADY_LOCKED));
+        assertFalse(lockResults.contains(LockResultEnum.LOCK_FAILED));
+        assertFalse(lockResults.contains(LockResultEnum.ALREADY_LOCKED));
     }
 
     @Test
@@ -56,11 +56,11 @@ public class DistributedLockClientTest {
         doThrow(new LockFailedException()).when(subLockClient3).lock(TEST_ID);
 
         // when
-        List<LockResult> lockResults = lockClient.lock(TEST_ID);
+        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResult.OK));
-        assertFalse(lockResults.contains(LockResult.ALREADY_LOCKED));
+        assertFalse(lockResults.contains(LockResultEnum.OK));
+        assertFalse(lockResults.contains(LockResultEnum.ALREADY_LOCKED));
     }
 
     @Test
@@ -71,11 +71,11 @@ public class DistributedLockClientTest {
         doThrow(new AlreadyLockedException()).when(subLockClient3).lock(TEST_ID);
 
         // when
-        List<LockResult> lockResults = lockClient.lock(TEST_ID);
+        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResult.OK));
-        assertFalse(lockResults.contains(LockResult.LOCK_FAILED));
+        assertFalse(lockResults.contains(LockResultEnum.OK));
+        assertFalse(lockResults.contains(LockResultEnum.LOCK_FAILED));
     }
 
     @Test

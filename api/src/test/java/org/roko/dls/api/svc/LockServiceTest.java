@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.roko.dls.api.lockclient.DistributedLockClient;
-import org.roko.dls.api.lockclient.LockResult;
+import org.roko.dls.api.lockclient.LockResultEnum;
 import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
 
 public class LockServiceTest {
 
-    private List<LockResult> lockResults = new ArrayList<>();
+    private List<LockResultEnum> lockResults = new ArrayList<>();
     private List<UnlockResult> unlockResults = new ArrayList<>();
 
     @Mock

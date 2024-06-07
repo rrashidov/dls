@@ -1,6 +1,6 @@
 package org.roko.dls.api.controller;
 
-import org.roko.dls.api.lockclient.LockResult;
+import org.roko.dls.api.lockclient.LockResultEnum;
 import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.svc.LockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class LockController {
 
     @PostMapping("/{lockid}")
     public HttpStatus lock(@PathVariable("lockid") String lockid) {
-        LockResult lockResult = svc.lock(lockid);
+        LockResultEnum lockResult = svc.lock(lockid);
 
-        if (lockResult.equals(LockResult.ALREADY_LOCKED)) {
+        if (lockResult.equals(LockResultEnum.ALREADY_LOCKED)) {
             return HttpStatus.CONFLICT;
         }
 
-        if (lockResult.equals(LockResult.LOCK_FAILED)) {
+        if (lockResult.equals(LockResultEnum.LOCK_FAILED)) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
