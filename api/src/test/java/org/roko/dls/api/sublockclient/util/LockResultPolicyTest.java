@@ -6,11 +6,17 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.LockResultEnum;
 import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
+import org.roko.dls.api.sublockclient.SublockClient;
 
 public class LockResultPolicyTest {
+
+    @Mock
+    private SublockClient sublockClientMock;
 
     private LockResultPolicy policy;
 
@@ -22,9 +28,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspecReturnsOK_whenQuorumOfResultsAreOK(){
         // given
-        LockResultEnum lockResult = LockResultEnum.OK;
-        LockResultEnum lockresult2 = LockResultEnum.OK;
-        LockResultEnum lockresult3 = LockResultEnum.LOCK_FAILED;
+        LockResult lockResult = new LockResult(sublockClientMock, LockResultEnum.OK);
+        LockResult lockresult2 = new LockResult(sublockClientMock, LockResultEnum.OK);
+        LockResult lockresult3 = new LockResult(sublockClientMock, LockResultEnum.LOCK_FAILED);
 
         // when
         LockResultEnum result = policy.inspectLockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
@@ -36,9 +42,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspectReturnsAlreadyLocked_whenQuorumOfResultsAreAlreadyLocked(){
         // given
-        LockResultEnum lockResult = LockResultEnum.OK;
-        LockResultEnum lockresult2 = LockResultEnum.ALREADY_LOCKED;
-        LockResultEnum lockresult3 = LockResultEnum.ALREADY_LOCKED;
+        LockResult lockResult = new LockResult(sublockClientMock, LockResultEnum.OK);
+        LockResult lockresult2 = new LockResult(sublockClientMock, LockResultEnum.ALREADY_LOCKED);
+        LockResult lockresult3 = new LockResult(sublockClientMock, LockResultEnum.ALREADY_LOCKED);
 
         // when
         LockResultEnum result = policy.inspectLockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
@@ -50,9 +56,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspectReturnsLockFailed_whenQuorumOfResultsAreLockFailed(){
         // given
-        LockResultEnum lockResult = LockResultEnum.LOCK_FAILED;
-        LockResultEnum lockresult2 = LockResultEnum.LOCK_FAILED;
-        LockResultEnum lockresult3 = LockResultEnum.OK;
+        LockResult lockResult = new LockResult(sublockClientMock, LockResultEnum.LOCK_FAILED);
+        LockResult lockresult2 = new LockResult(sublockClientMock, LockResultEnum.LOCK_FAILED);
+        LockResult lockresult3 = new LockResult(sublockClientMock, LockResultEnum.OK);
 
         // when
         LockResultEnum result = policy.inspectLockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
@@ -64,9 +70,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspectReturnsLockFailed_whenQuorumOfResultsAreNotOK(){
         // given
-        LockResultEnum lockResult = LockResultEnum.LOCK_FAILED;
-        LockResultEnum lockresult2 = LockResultEnum.ALREADY_LOCKED;
-        LockResultEnum lockresult3 = LockResultEnum.OK;
+        LockResult lockResult = new LockResult(sublockClientMock, LockResultEnum.LOCK_FAILED);
+        LockResult lockresult2 = new LockResult(sublockClientMock, LockResultEnum.ALREADY_LOCKED);
+        LockResult lockresult3 = new LockResult(sublockClientMock, LockResultEnum.OK);
 
         // when
         LockResultEnum result = policy.inspectLockResults(Arrays.asList(lockResult, lockresult2, lockresult3));

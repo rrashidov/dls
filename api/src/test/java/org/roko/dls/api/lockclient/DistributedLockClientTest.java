@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,11 +42,11 @@ public class DistributedLockClientTest {
         // none of the sublock clients throw any exceptions
 
         // when
-        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResultEnum.LOCK_FAILED));
-        assertFalse(lockResults.contains(LockResultEnum.ALREADY_LOCKED));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.LOCK_FAILED));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.ALREADY_LOCKED));
     }
 
     @Test
@@ -56,11 +57,11 @@ public class DistributedLockClientTest {
         doThrow(new LockFailedException()).when(subLockClient3).lock(TEST_ID);
 
         // when
-        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResultEnum.OK));
-        assertFalse(lockResults.contains(LockResultEnum.ALREADY_LOCKED));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.OK));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.ALREADY_LOCKED));
     }
 
     @Test
@@ -71,11 +72,11 @@ public class DistributedLockClientTest {
         doThrow(new AlreadyLockedException()).when(subLockClient3).lock(TEST_ID);
 
         // when
-        List<LockResultEnum> lockResults = lockClient.lock(TEST_ID);
+        List<LockResult> lockResults = lockClient.lock(TEST_ID);
 
         // then
-        assertFalse(lockResults.contains(LockResultEnum.OK));
-        assertFalse(lockResults.contains(LockResultEnum.LOCK_FAILED));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.OK));
+        assertFalse(lockResultsContains(lockResults, LockResultEnum.LOCK_FAILED));
     }
 
     @Test
@@ -102,6 +103,12 @@ public class DistributedLockClientTest {
 
         // then
         assertFalse(unlockResults.contains(UnlockResultEnum.OK));
+    }
+
+    private boolean lockResultsContains(List<LockResult> lockResults, LockResultEnum lockResult) {
+        return lockResults.stream()
+            .map(x -> x.getResult())
+            .anyMatch(x -> x.equals(lockResult));
     }
 
 }

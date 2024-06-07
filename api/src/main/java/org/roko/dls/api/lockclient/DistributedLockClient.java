@@ -15,17 +15,17 @@ public class DistributedLockClient {
         this.sublockClients = sublockClients;
     }
 
-    public List<LockResultEnum> lock(String id) {
-        List<LockResultEnum> lockResults = new ArrayList<>();
+    public List<LockResult> lock(String id) {
+        List<LockResult> lockResults = new ArrayList<>();
 
         for (SublockClient sublockClient : sublockClients) {
             try {
                 sublockClient.lock(id);
-                lockResults.add(LockResultEnum.OK);
+                lockResults.add(new LockResult(sublockClient, LockResultEnum.OK));
             } catch (AlreadyLockedException e) {
-                lockResults.add(LockResultEnum.ALREADY_LOCKED);
+                lockResults.add(new LockResult(sublockClient, LockResultEnum.ALREADY_LOCKED));
             } catch (LockFailedException e) {
-                lockResults.add(LockResultEnum.LOCK_FAILED);
+                lockResults.add(new LockResult(sublockClient, LockResultEnum.LOCK_FAILED));
             };
         }
 

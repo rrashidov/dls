@@ -3,6 +3,7 @@ package org.roko.dls.api.svc;
 import java.util.List;
 
 import org.roko.dls.api.lockclient.DistributedLockClient;
+import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.LockResultEnum;
 import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
@@ -22,7 +23,7 @@ public class LockService {
 	}
 
 	public LockResultEnum lock(String id){
-        List<LockResultEnum> lockResults = lockClient.lock(id);
+        List<LockResult> lockResults = lockClient.lock(id);
 
         return lockResultPolicy.inspectLockResults(lockResults);
     }
