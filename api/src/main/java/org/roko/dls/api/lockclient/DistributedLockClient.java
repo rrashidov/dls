@@ -32,15 +32,15 @@ public class DistributedLockClient {
         return lockResults;
     }
 
-    public List<UnlockResult> unlock(String id) {
-        List<UnlockResult> unlockResults = new ArrayList<>();
+    public List<UnlockResultEnum> unlock(String id) {
+        List<UnlockResultEnum> unlockResults = new ArrayList<>();
 
         for (SublockClient sublockClient : sublockClients) {
             try {
                 sublockClient.unlock(id);
-                unlockResults.add(UnlockResult.OK);
+                unlockResults.add(UnlockResultEnum.OK);
             } catch (LockFailedException e) {
-                unlockResults.add(UnlockResult.UNLOCK_FAILED);
+                unlockResults.add(UnlockResultEnum.UNLOCK_FAILED);
             };
         }
 

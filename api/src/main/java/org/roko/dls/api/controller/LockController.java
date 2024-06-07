@@ -1,7 +1,7 @@
 package org.roko.dls.api.controller;
 
 import org.roko.dls.api.lockclient.LockResultEnum;
-import org.roko.dls.api.lockclient.UnlockResult;
+import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.svc.LockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,9 +39,9 @@ public class LockController {
 
     @DeleteMapping("/{lockid}")
     public HttpStatus unlock(@PathVariable("lockid") String lockid ){
-        UnlockResult unlockResult = svc.unlock(lockid);
+        UnlockResultEnum unlockResult = svc.unlock(lockid);
 
-        if (unlockResult.equals(UnlockResult.UNLOCK_FAILED)) {
+        if (unlockResult.equals(UnlockResultEnum.UNLOCK_FAILED)) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 

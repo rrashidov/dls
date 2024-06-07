@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.roko.dls.api.lockclient.LockResultEnum;
-import org.roko.dls.api.lockclient.UnlockResult;
+import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
 
 public class LockResultPolicyTest {
@@ -78,28 +78,28 @@ public class LockResultPolicyTest {
     @Test
     public void inspectUnlockResultsReturnsOK_whenQuorumOfResultsAreOK(){
         // given
-        UnlockResult lockResult = UnlockResult.OK;
-        UnlockResult lockresult2 = UnlockResult.OK;
-        UnlockResult lockresult3 = UnlockResult.UNLOCK_FAILED;
+        UnlockResultEnum lockResult = UnlockResultEnum.OK;
+        UnlockResultEnum lockresult2 = UnlockResultEnum.OK;
+        UnlockResultEnum lockresult3 = UnlockResultEnum.UNLOCK_FAILED;
 
         // when
-        UnlockResult result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
+        UnlockResultEnum result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
 
         // then
-        assertEquals(UnlockResult.OK, result);
+        assertEquals(UnlockResultEnum.OK, result);
     }
 
     @Test
     public void inspectUnlockResultsReturnsUnlockFailed_whenQuorumOfResultsAreUnlockFailed(){
         // given
-        UnlockResult lockResult = UnlockResult.UNLOCK_FAILED;
-        UnlockResult lockresult2 = UnlockResult.UNLOCK_FAILED;
-        UnlockResult lockresult3 = UnlockResult.OK;
+        UnlockResultEnum lockResult = UnlockResultEnum.UNLOCK_FAILED;
+        UnlockResultEnum lockresult2 = UnlockResultEnum.UNLOCK_FAILED;
+        UnlockResultEnum lockresult3 = UnlockResultEnum.OK;
 
         // when
-        UnlockResult result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
+        UnlockResultEnum result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
 
         // then
-        assertEquals(UnlockResult.UNLOCK_FAILED, result);
+        assertEquals(UnlockResultEnum.UNLOCK_FAILED, result);
     }
 }

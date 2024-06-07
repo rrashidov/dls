@@ -3,7 +3,7 @@ package org.roko.dls.api.lockclient.util;
 import java.util.List;
 
 import org.roko.dls.api.lockclient.LockResultEnum;
-import org.roko.dls.api.lockclient.UnlockResult;
+import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,18 +32,18 @@ public class LockResultPolicy {
         return LockResultEnum.OK;
     }
 
-    public UnlockResult inspectUnlockResults(List<UnlockResult> lockResults) {
+    public UnlockResultEnum inspectUnlockResults(List<UnlockResultEnum> lockResults) {
         int cnt = lockResults.size();
         int quorumCount = cnt / 2 + 1;
 
         long lockFailedCount = lockResults.stream()
-            .filter(x -> x == UnlockResult.UNLOCK_FAILED)
+            .filter(x -> x == UnlockResultEnum.UNLOCK_FAILED)
             .count();
 
         if ((lockFailedCount) >= quorumCount) {
-            return UnlockResult.UNLOCK_FAILED;
+            return UnlockResultEnum.UNLOCK_FAILED;
         }
 
-        return UnlockResult.OK;
+        return UnlockResultEnum.OK;
     }
 }

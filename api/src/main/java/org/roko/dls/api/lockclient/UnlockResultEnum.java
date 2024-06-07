@@ -1,6 +1,6 @@
 package org.roko.dls.api.lockclient;
 
-public enum UnlockResult {
+public enum UnlockResultEnum {
 
     OK,
     UNLOCK_FAILED;
