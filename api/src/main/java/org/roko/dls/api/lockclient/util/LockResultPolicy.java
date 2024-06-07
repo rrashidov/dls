@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.LockResultEnum;
+import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.springframework.stereotype.Component;
 
@@ -33,12 +34,12 @@ public class LockResultPolicy {
         return LockResultEnum.OK;
     }
 
-    public UnlockResultEnum inspectUnlockResults(List<UnlockResultEnum> lockResults) {
+    public UnlockResultEnum inspectUnlockResults(List<UnlockResult> lockResults) {
         int cnt = lockResults.size();
         int quorumCount = cnt / 2 + 1;
 
         long lockFailedCount = lockResults.stream()
-            .filter(x -> x == UnlockResultEnum.UNLOCK_FAILED)
+            .filter(x -> x.getResult() == UnlockResultEnum.UNLOCK_FAILED)
             .count();
 
         if ((lockFailedCount) >= quorumCount) {

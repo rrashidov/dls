@@ -84,10 +84,10 @@ public class DistributedLockClientTest {
         // none of the sublock clients throw any exceptions
 
         // when
-        List<UnlockResultEnum> unlockResults = lockClient.unlock(TEST_ID);
+        List<UnlockResult> unlockResults = lockClient.unlock(TEST_ID);
 
         // then
-        assertFalse(unlockResults.contains(UnlockResultEnum.UNLOCK_FAILED));
+        assertFalse(unlockResultsContains(unlockResults, UnlockResultEnum.UNLOCK_FAILED));
     }
 
     @Test
@@ -98,16 +98,22 @@ public class DistributedLockClientTest {
         doThrow(new LockFailedException()).when(subLockClient3).unlock(TEST_ID);
 
         // when
-        List<UnlockResultEnum> unlockResults = lockClient.unlock(TEST_ID);
+        List<UnlockResult> unlockResults = lockClient.unlock(TEST_ID);
 
         // then
-        assertFalse(unlockResults.contains(UnlockResultEnum.OK));
+        assertFalse(unlockResultsContains(unlockResults, UnlockResultEnum.OK));
     }
 
     private boolean lockResultsContains(List<LockResult> lockResults, LockResultEnum lockResult) {
         return lockResults.stream()
             .map(x -> x.getResult())
             .anyMatch(x -> x.equals(lockResult));
+    }
+
+    private boolean unlockResultsContains(List<UnlockResult> unlockResults, UnlockResultEnum unlockResult) {
+        return unlockResults.stream()
+            .map(x -> x.getResult())
+            .anyMatch(x -> x.equals(unlockResult));
     }
 
 }

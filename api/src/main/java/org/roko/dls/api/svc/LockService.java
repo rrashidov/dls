@@ -5,6 +5,7 @@ import java.util.List;
 import org.roko.dls.api.lockclient.DistributedLockClient;
 import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.LockResultEnum;
+import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class LockService {
     }
 
     public UnlockResultEnum unlock(String id){
-        List<UnlockResultEnum> unlockResults = lockClient.unlock(id);
+        List<UnlockResult> unlockResults = lockClient.unlock(id);
 
         return lockResultPolicy.inspectUnlockResults(unlockResults);
     }

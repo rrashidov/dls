@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.roko.dls.api.lockclient.LockResult;
 import org.roko.dls.api.lockclient.LockResultEnum;
+import org.roko.dls.api.lockclient.UnlockResult;
 import org.roko.dls.api.lockclient.UnlockResultEnum;
 import org.roko.dls.api.lockclient.util.LockResultPolicy;
 import org.roko.dls.api.sublockclient.SublockClient;
@@ -84,9 +85,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspectUnlockResultsReturnsOK_whenQuorumOfResultsAreOK(){
         // given
-        UnlockResultEnum lockResult = UnlockResultEnum.OK;
-        UnlockResultEnum lockresult2 = UnlockResultEnum.OK;
-        UnlockResultEnum lockresult3 = UnlockResultEnum.UNLOCK_FAILED;
+        UnlockResult lockResult = new UnlockResult(sublockClientMock, UnlockResultEnum.OK);
+        UnlockResult lockresult2 = new UnlockResult(sublockClientMock, UnlockResultEnum.OK);
+        UnlockResult lockresult3 = new UnlockResult(sublockClientMock, UnlockResultEnum.UNLOCK_FAILED);
 
         // when
         UnlockResultEnum result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
@@ -98,9 +99,9 @@ public class LockResultPolicyTest {
     @Test
     public void inspectUnlockResultsReturnsUnlockFailed_whenQuorumOfResultsAreUnlockFailed(){
         // given
-        UnlockResultEnum lockResult = UnlockResultEnum.UNLOCK_FAILED;
-        UnlockResultEnum lockresult2 = UnlockResultEnum.UNLOCK_FAILED;
-        UnlockResultEnum lockresult3 = UnlockResultEnum.OK;
+        UnlockResult lockResult = new UnlockResult(sublockClientMock, UnlockResultEnum.UNLOCK_FAILED);
+        UnlockResult lockresult2 = new UnlockResult(sublockClientMock, UnlockResultEnum.UNLOCK_FAILED);
+        UnlockResult lockresult3 = new UnlockResult(sublockClientMock, UnlockResultEnum.OK);
 
         // when
         UnlockResultEnum result = policy.inspectUnlockResults(Arrays.asList(lockResult, lockresult2, lockresult3));
