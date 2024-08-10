@@ -1,6 +1,7 @@
 package org.roko.sublock.svc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.roko.sublock.domain.LockResult;
 import org.roko.sublock.domain.Sublock;
+import org.roko.sublock.domain.UnlockResult;
 import org.roko.sublock.repo.SublockRepo;
 import org.springframework.dao.QueryTimeoutException;
 
@@ -55,5 +57,34 @@ public class SublockServiceTest {
         LockResult lockResult = svc.lock(TEST_ID);
 
         assertEquals(LockResult.LOCK_FAILED, lockResult, "Lock should return LOCK_FAILED, when issues with DB communication");
+    }
+
+    @Test
+    public void unlockSucceeds_whenSublockEntityDoesNotExist(){
+        when(repoMock.findById(TEST_ID)).thenReturn(Optional.empty());
+
+        UnlockResult lockResult = svc.unlock(TEST_ID);
+
+        assertEquals(UnlockResult.OK, lockResult, "Unlock should succeed, when entity does not exist");
+    }
+
+    @Test
+    public void unlockSucceeds_whenSublockEntityExists(){
+        Sublock sublock = new Sublock();
+        when(repoMock.findById(TEST_ID)).thenReturn(Optional.of(sublock));
+
+        UnlockResult lockResult = svc.unlock(TEST_ID);
+
+        assertEquals(UnlockResult.OK, lockResult, "Unlock should succeed, when entity exists");
+        verify(repoMock).delete(sublock);
+    }
+
+    @Test
+    public void unlockFails_whenIssuesWithDBCommunication(){
+        when(repoMock.findById(TEST_ID)).thenThrow(QueryTimeoutException.class);
+
+        UnlockResult lockResult = svc.unlock(TEST_ID);
+
+        assertEquals(UnlockResult.UNLOCK_FAILED, lockResult, "Unlock should return UNLOCK_FAILED, when issues with DB communication");
     }
 }
