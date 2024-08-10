@@ -21,3 +21,7 @@ buildNumber.properties
 
 # MacOS files
 .DS_Store
+
+# Envrionment file
+.envrc
+
