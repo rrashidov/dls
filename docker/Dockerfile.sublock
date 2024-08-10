@@ -1,0 +1,5 @@
+FROM sublock.commonjava:0.0.1
+
+COPY sublock.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
