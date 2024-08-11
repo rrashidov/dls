@@ -1,11 +1,11 @@
-package org.roko.sublock.svc;
+package org.roko.dls.sublock.svc;
 
 import java.util.Optional;
 
-import org.roko.sublock.domain.LockResult;
-import org.roko.sublock.domain.Sublock;
-import org.roko.sublock.domain.UnlockResult;
-import org.roko.sublock.repo.SublockRepo;
+import org.roko.dls.sublock.domain.LockResult;
+import org.roko.dls.sublock.domain.Sublock;
+import org.roko.dls.sublock.domain.UnlockResult;
+import org.roko.dls.sublock.repo.SublockRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;

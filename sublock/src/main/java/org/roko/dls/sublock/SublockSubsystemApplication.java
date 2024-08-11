@@ -1,4 +1,4 @@
-package org.roko.sublock;
+package org.roko.dls.sublock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

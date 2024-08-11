@@ -1,4 +1,4 @@
-package org.roko.sublock.domain;
+package org.roko.dls.sublock.domain;
 
 public enum UnlockResult {
     OK,

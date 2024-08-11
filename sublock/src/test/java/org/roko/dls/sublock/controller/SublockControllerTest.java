@@ -1,4 +1,4 @@
-package org.roko.sublock.controller;
+package org.roko.dls.sublock.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -7,9 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.sublock.domain.LockResult;
-import org.roko.sublock.domain.UnlockResult;
-import org.roko.sublock.svc.SublockService;
+import org.roko.dls.sublock.controller.SublockController;
+import org.roko.dls.sublock.domain.LockResult;
+import org.roko.dls.sublock.domain.UnlockResult;
+import org.roko.dls.sublock.svc.SublockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

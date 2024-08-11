@@ -1,8 +1,8 @@
-package org.roko.sublock.controller;
+package org.roko.dls.sublock.controller;
 
-import org.roko.sublock.domain.LockResult;
-import org.roko.sublock.domain.UnlockResult;
-import org.roko.sublock.svc.SublockService;
+import org.roko.dls.sublock.domain.LockResult;
+import org.roko.dls.sublock.domain.UnlockResult;
+import org.roko.dls.sublock.svc.SublockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

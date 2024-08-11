@@ -1,4 +1,4 @@
-package org.roko.sublock.svc;
+package org.roko.dls.sublock.svc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -10,10 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.sublock.domain.LockResult;
-import org.roko.sublock.domain.Sublock;
-import org.roko.sublock.domain.UnlockResult;
-import org.roko.sublock.repo.SublockRepo;
+import org.roko.dls.sublock.domain.LockResult;
+import org.roko.dls.sublock.domain.Sublock;
+import org.roko.dls.sublock.domain.UnlockResult;
+import org.roko.dls.sublock.repo.SublockRepo;
+import org.roko.dls.sublock.svc.SublockService;
 import org.springframework.dao.QueryTimeoutException;
 
 public class SublockServiceTest {

@@ -1,4 +1,4 @@
-package org.roko.sublock.domain;
+package org.roko.dls.sublock.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
