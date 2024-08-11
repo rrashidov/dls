@@ -14,7 +14,6 @@ import org.roko.dls.sublock.domain.LockResult;
 import org.roko.dls.sublock.domain.Sublock;
 import org.roko.dls.sublock.domain.UnlockResult;
 import org.roko.dls.sublock.repo.SublockRepo;
-import org.roko.dls.sublock.svc.SublockService;
 import org.springframework.dao.QueryTimeoutException;
 
 public class SublockServiceTest {

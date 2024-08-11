@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.dls.sublock.controller.SublockController;
 import org.roko.dls.sublock.domain.LockResult;
 import org.roko.dls.sublock.domain.UnlockResult;
 import org.roko.dls.sublock.svc.SublockService;
