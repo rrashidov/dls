@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>org.roko</groupId>
+	<groupId>org.roko.dls</groupId>
 	<artifactId>sublock</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
