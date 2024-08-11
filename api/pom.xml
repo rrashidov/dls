@@ -10,21 +10,35 @@
 	</parent>
 
 	<groupId>org.roko.dls</groupId>
-	<artifactId>dls</artifactId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
-	<name>DLS</name>
-	<description>DLS</description>
-	
-	<packaging>pom</packaging>
+
+	<name>DLS - api</name>
 
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 
-	<modules>
-		<module>api</module>
-		<module>sublock</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
