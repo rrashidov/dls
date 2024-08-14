@@ -1,4 +1,4 @@
-package org.roko.dls.api.sublock.client;
+package org.roko.dls.api.service.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -11,7 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.roko.dls.api.service.util.DistributedSublockClient;
+import org.roko.dls.api.sublock.client.LockResult;
+import org.roko.dls.api.sublock.client.SublockClient;
+import org.roko.dls.api.sublock.client.UnlockResult;
 
 public class DistributedSublockClientTest {
 
