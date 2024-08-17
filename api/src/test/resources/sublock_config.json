@@ -1,0 +1,13 @@
+{
+    "sublockClients" : [
+        {
+            "url" : "http://sublock1:8080"
+        },
+        {
+            "url" : "http://sublock2:8080"
+        },
+        {
+            "url" : "http://sublock3:8080"
+        }
+    ]
+}
