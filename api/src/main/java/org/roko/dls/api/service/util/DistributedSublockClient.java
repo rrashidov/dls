@@ -6,11 +6,15 @@ import java.util.stream.Collectors;
 import org.roko.dls.api.sublock.client.LockResult;
 import org.roko.dls.api.sublock.client.SublockClient;
 import org.roko.dls.api.sublock.client.UnlockResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DistributedSublockClient {
 
     private List<SublockClient> sublockClients;
 
+    @Autowired
     public DistributedSublockClient(List<SublockClient> sublockClients) {
         this.sublockClients = sublockClients;
     }
