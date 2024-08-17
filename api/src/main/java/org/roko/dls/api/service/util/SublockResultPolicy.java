@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.roko.dls.api.sublock.client.LockResult;
 import org.roko.dls.api.sublock.client.UnlockResult;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SublockResultPolicy {
 
     public LockResult verifyLockResults(List<LockResult> lockResults){
