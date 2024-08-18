@@ -1,5 +1,5 @@
 services:
-  mysql:
+  mysql1:
     image: mysql:8.1.0
     environment:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}"
@@ -14,21 +14,83 @@ services:
       timeout: 30s
       retries: 30
       start_period: 30s
-  sublock:
+  mysql2:
+    image: mysql:8.1.0
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-sublock}"
+      - "MYSQL_USER=${MYSQL_USER:-sublock}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-sublock}"
+    networks: 
+      - my-shared-network
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=${MYSQL_ROOT_PASSWORD:-root} --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 30s
+      retries: 30
+      start_period: 30s
+  mysql3:
+    image: mysql:8.1.0
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE:-sublock}"
+      - "MYSQL_USER=${MYSQL_USER:-sublock}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-sublock}"
+    networks: 
+      - my-shared-network
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=${MYSQL_ROOT_PASSWORD:-root} --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 30s
+      retries: 30
+      start_period: 30s
+  sublock1:
     image: dls.sublock:0.0.1
     environment:
       - DB_DRIVER=${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
-      - DB_URL=${DB_URL:-jdbc:mysql://mysql:3306/sublock}
+      - DB_URL=${DB_URL:-jdbc:mysql://mysql1:3306/sublock}
       - DB_USERNAME=${MYSQL_USER:-sublock}
       - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
       - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
     networks: 
       - my-shared-network
-    ports:
-      - "8081:8081"
     depends_on:
-      mysql:
+      mysql1:
         condition: service_healthy
+  sublock2:
+    image: dls.sublock:0.0.1
+    environment:
+      - DB_DRIVER=${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
+      - DB_URL=${DB_URL:-jdbc:mysql://mysql2:3306/sublock}
+      - DB_USERNAME=${MYSQL_USER:-sublock}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
+      - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
+    networks: 
+      - my-shared-network
+    depends_on:
+      mysql2:
+        condition: service_healthy
+  sublock3:
+    image: dls.sublock:0.0.1
+    environment:
+      - DB_DRIVER=${DB_DRIVER:-com.mysql.cj.jdbc.Driver}
+      - DB_URL=${DB_URL:-jdbc:mysql://mysql3:3306/sublock}
+      - DB_USERNAME=${MYSQL_USER:-sublock}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
+      - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
+    networks: 
+      - my-shared-network
+    depends_on:
+      mysql3:
+        condition: service_healthy
+  api:
+    image: dls.api:0.0.1
+    environment:
+      - SUBLOCK_CONFIG_PATH=/etc/api/sublock_config.json
+    networks: 
+      - my-shared-network
+    ports:
+      - "8081:8080"
 
 networks:
   my-shared-network: {}

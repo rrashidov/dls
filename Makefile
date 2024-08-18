@@ -33,37 +33,40 @@ clean:
 # CONTAINER IMAGES
 # ==================================================================================== #
 
-## containerize-sublock: builds container images with Java components
-.PHONY: containerize-sublock
-containerize-sublock: build
+## containerize: builds container images with Java components
+.PHONY: containerize
+containerize: build
 	@echo "Start preparing docker context"
 	@cp sublock/target/sublock-0.0.1-SNAPSHOT.jar docker/sublock.jar
+	@cp api/target/api-0.0.1-SNAPSHOT.jar docker/api.jar
 	@echo "Finished preparing docker context"
 	
 	@echo "Start building sublock container image"
 	@docker build -t sublock.commonjava:0.0.1 -f ./docker/Dockerfile.common ./docker
 	@docker build -t dls.sublock:0.0.1 -f ./docker/Dockerfile.sublock ./docker
+	@docker build -t dls.api:0.0.1 -f ./docker/Dockerfile.api ./docker
 	@echo "Finished building sublock container images"
 
 	@echo "Start cleaning up after container images are built"
 	@rm ./docker/sublock.jar
+	@rm ./docker/api.jar
 	@echo "Finished cleaning up after container images are built"
 
 # ==================================================================================== #
 # LOCAL SETUP
 # ==================================================================================== #
 
-## start-sublock-locally: starts the sublock system locally using docker compose
-.PHONY: start-sublock-locally
-start-sublock-locally: stop-sublock-locally containerize-sublock
-	@echo "Start sublock locally"
+## start-locally: starts the dls system locally using docker compose
+.PHONY: start-locally
+start-locally: stop-locally containerize
+	@echo "Start dls locally"
 	@docker compose -f ./docker/docker-compose.yml up -d 
-	@echo "Started sublock locally. You can access it at http://localhost:8081"
+	@echo "Started dls locally. You can access it at http://localhost:8081"
 
-## stop-sublock-locally: stops the sublock system locally
-.PHONY: stop-sublock-locally
-stop-sublock-locally:
-	@echo "Stop locally running sublock"
+## stop-locally: stops the dls system locally
+.PHONY: stop-locally
+stop-locally:
+	@echo "Stop locally running dls"
 	@docker compose -f ./docker/docker-compose.yml down
-	@echo "Stopped locally running sublock"
+	@echo "Stopped locally running dls"
 

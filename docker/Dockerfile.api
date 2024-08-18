@@ -1,0 +1,7 @@
+FROM sublock.commonjava:0.0.1
+
+COPY ./api_config/sublock_config.json /etc/api/sublock_config.json
+
+COPY api.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
