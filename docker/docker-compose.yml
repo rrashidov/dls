@@ -52,6 +52,11 @@ services:
       - DB_USERNAME=${MYSQL_USER:-sublock}
       - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
       - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
+    healthcheck:
+      test: "curl -f localhost:8080/healthcheck"
+      interval: 2s
+      timeout: 2s
+      retries: 60
     networks: 
       - my-shared-network
     depends_on:
@@ -65,6 +70,11 @@ services:
       - DB_USERNAME=${MYSQL_USER:-sublock}
       - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
       - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
+    healthcheck:
+      test: "curl -f localhost:8080/healthcheck"
+      interval: 2s
+      timeout: 2s
+      retries: 60
     networks: 
       - my-shared-network
     depends_on:
@@ -78,6 +88,11 @@ services:
       - DB_USERNAME=${MYSQL_USER:-sublock}
       - DB_PASSWORD=${MYSQL_PASSWORD:-sublock}
       - DB_PLATFORM=${DB_PLATFORM:-org.hibernate.dialect.MySQLDialect}
+    healthcheck:
+      test: "curl -f localhost:8080/healthcheck"
+      interval: 2s
+      timeout: 2s
+      retries: 60
     networks: 
       - my-shared-network
     depends_on:
@@ -89,6 +104,13 @@ services:
       - SUBLOCK_CONFIG_PATH=/etc/api/sublock_config.json
     networks: 
       - my-shared-network
+    depends_on:
+      sublock1:
+        condition: service_healthy
+      sublock2:
+        condition: service_healthy
+      sublock3:
+        condition: service_healthy
     ports:
       - "8081:8080"
 
