@@ -1,5 +1,6 @@
 package org.roko.dls.api.service.util.config;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,8 @@ public class SublockClientsProvider {
         return sublockConfig.getSublockClients().stream()
             .map(x -> {
                 RestTemplateBuilder builder = new RestTemplateBuilder();
+                builder = builder.setConnectTimeout(Duration.ofMillis(x.getConnectTimeout()));
+                builder = builder.setReadTimeout(Duration.ofMillis(x.getReadTimeout()));
                 builder = builder.rootUri(x.getUrl());
 
                 RestTemplate restTemplate = builder.build();
