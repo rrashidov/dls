@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 public class RESTSublockClientTest {
@@ -60,6 +64,26 @@ public class RESTSublockClientTest {
     }
 
     @Test
+    public void lockReturnsAlreadyLocked_whenClientThrowsHttpClientErrorException() {
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, TEST_ID, String.class))
+                .thenThrow(new HttpClientErrorException(HttpStatusCode.valueOf(400)));
+
+        LockResult lockResult = client.lock(TEST_ID);
+
+        assertEquals(LockResult.ALREADY_LOCKED, lockResult);
+    }
+
+    @Test
+    public void lockReturnsLockFailed_whenClientThrowsHttpServerErrorException(){
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, TEST_ID, String.class))
+                .thenThrow(new HttpServerErrorException(HttpStatusCode.valueOf(500)));
+
+        LockResult lockResult = client.lock(TEST_ID);
+
+        assertEquals(LockResult.LOCK_FAILED, lockResult);
+    }
+
+    @Test
     public void unlockReturnsOK_whenServerReturns200() {
         when(restTemplateMock.exchange(SUBLOCK_URL + TEST_ID, HttpMethod.DELETE, null, String.class))
                 .thenReturn(ResponseEntity.ok().build());
@@ -73,6 +97,16 @@ public class RESTSublockClientTest {
     public void unlockReturnsUnlockFailed_whenServerReturns5xx() {
         when(restTemplateMock.exchange(SUBLOCK_URL + TEST_ID, HttpMethod.DELETE, null, String.class))
                 .thenReturn(ResponseEntity.status(500).build());
+
+        UnlockResult unlockResult = client.unlock(TEST_ID);
+
+        assertEquals(UnlockResult.UNLOCK_FAILED, unlockResult);
+    }
+
+    @Test
+    public void unlockReturnsUnlockFailed_whenClientThrowsHttpServerErrorException(){
+        when(restTemplateMock.exchange(SUBLOCK_URL + TEST_ID, HttpMethod.DELETE, null, String.class))
+                .thenThrow(new HttpServerErrorException(HttpStatusCode.valueOf(500)));
 
         UnlockResult unlockResult = client.unlock(TEST_ID);
 
