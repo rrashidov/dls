@@ -24,6 +24,8 @@ services:
       - 9600:9600  # required for Performance Analyzer
     networks:
       - my-shared-network
+    profiles:
+      - logging
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest
     container_name: opensearch-ui
@@ -35,6 +37,8 @@ services:
       OPENSEARCH_HOSTS: '["https://opensearch-data:9200"]'
     networks:
       - my-shared-network
+    profiles:
+      - logging
   mysql1:
     image: mysql:8.1.0
     environment:
@@ -54,6 +58,8 @@ services:
       resources:
         limits:
           memory: 256M
+    profiles:
+      - core
   mysql2:
     image: mysql:8.1.0
     environment:
@@ -69,6 +75,8 @@ services:
       timeout: 30s
       retries: 30
       start_period: 30s
+    profiles:
+      - core
   mysql3:
     image: mysql:8.1.0
     environment:
@@ -84,6 +92,8 @@ services:
       timeout: 30s
       retries: 30
       start_period: 30s
+    profiles:
+      - core
   sublock1:
     image: dls.sublock:0.0.1
     environment:
@@ -102,6 +112,8 @@ services:
     depends_on:
       mysql1:
         condition: service_healthy
+    profiles:
+      - core
   sublock2:
     image: dls.sublock:0.0.1
     environment:
@@ -120,6 +132,8 @@ services:
     depends_on:
       mysql2:
         condition: service_healthy
+    profiles:
+      - core
   sublock3:
     image: dls.sublock:0.0.1
     environment:
@@ -138,6 +152,8 @@ services:
     depends_on:
       mysql3:
         condition: service_healthy
+    profiles:
+      - core
   logstash-api:
     image: opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0
     volumes:
@@ -146,6 +162,8 @@ services:
     command: logstash -f /etc/logstash/logstash.conf
     networks: 
       - my-shared-network
+    profiles:
+      - logging
   api:
     image: dls.api:0.0.1
     environment:
@@ -163,6 +181,8 @@ services:
         condition: service_healthy
     ports:
       - "8081:8080"
+    profiles:
+      - core
 
 volumes:
   opensearch-data: {}

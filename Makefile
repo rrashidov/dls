@@ -60,13 +60,20 @@ containerize: build
 .PHONY: start-locally
 start-locally: stop-locally containerize
 	@echo "Start dls locally"
-	@docker compose -f ./docker/docker-compose.yml up -d 
+	@docker compose --profile core -f ./docker/docker-compose.yml  up -d 
 	@echo "Started dls locally. You can access it at http://localhost:8081"
+
+## start-locally-with-logging: starts the dls system locally using docker compose and logging components
+.PHONY: start-locally-with-logging
+start-locally-with-logging: stop-locally containerize
+	@echo "Start dls locally with logging components"
+	@docker compose -f ./docker/docker-compose.yml --profile core --profile logging up -d 
+	@echo "Started dls locally with logging components. You can access it at http://localhost:8081"
 
 ## stop-locally: stops the dls system locally
 .PHONY: stop-locally
 stop-locally:
 	@echo "Stop locally running dls"
-	@docker compose -f ./docker/docker-compose.yml down
+	@docker compose -f ./docker/docker-compose.yml --profile core --profile logging down
 	@echo "Stopped locally running dls"
 
