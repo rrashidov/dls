@@ -1,6 +1,7 @@
 package org.roko.dls.api.service;
 
 import java.util.List;
+import java.util.Random;
 
 import org.roko.dls.api.service.util.DistributedSublockClient;
 import org.roko.dls.api.service.util.SublockResultPolicy;
@@ -22,7 +23,12 @@ public class LockService {
     }
 
     public LockResult lock(String id){
-        List<LockResult> lockResults = distributedSublockClient.lock(id);
+        long millis = System.currentTimeMillis();
+
+        Random r = new Random();
+        int random = r.nextInt(100);
+
+        List<LockResult> lockResults = distributedSublockClient.lock(id, millis, random);
 
         LockResult lockResult = policy.verifyLockResults(lockResults);
 

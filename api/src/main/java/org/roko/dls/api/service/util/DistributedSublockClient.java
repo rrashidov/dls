@@ -20,8 +20,16 @@ public class DistributedSublockClient {
     }
 
     public List<LockResult> lock(String id){
+        return lock(id, 0, 0);
+    }
+
+    public List<LockResult> lock(String id, long millis, long extraMillis){
         return sublockClients.stream()
-            .map(x -> x.lock(id))
+            .map(x -> {
+                LockResult lockResult = x.lock(id);
+                print("Lock " + millis + ":" + extraMillis + " result [" + x + "]: " + lockResult);
+                return lockResult;
+            })
             .collect(Collectors.toList());
     }
 
@@ -29,5 +37,13 @@ public class DistributedSublockClient {
         return sublockClients.stream()
             .map(x -> x.unlock(id))
             .collect(Collectors.toList());
+    }
+
+    private void print(String msg){
+        Thread t = Thread.currentThread();
+
+        long millis = System.currentTimeMillis();
+
+        System.out.println(t + " : " + millis + " : " + msg);
     }
 }
