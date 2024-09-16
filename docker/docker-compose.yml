@@ -168,6 +168,11 @@ services:
     image: dls.api:0.0.1
     environment:
       - SUBLOCK_CONFIG_PATH=/etc/api/sublock_config.json
+    healthcheck:
+      test: "curl -f localhost:8080/healthcheck"
+      interval: 2s
+      timeout: 2s
+      retries: 60
     networks: 
       - my-shared-network
     volumes:
@@ -183,6 +188,12 @@ services:
       - "8081:8080"
     profiles:
       - core
+  final:
+    image: busybox
+    depends_on:
+      api:
+        condition: service_healthy
+    command: 'sh'
 
 volumes:
   opensearch-data: {}
