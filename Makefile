@@ -77,3 +77,9 @@ stop-locally:
 	@docker compose -f ./docker/docker-compose.yml --profile core --profile logging down
 	@echo "Stopped locally running dls"
 
+## run-smoke-tests: executes smoke tests against locally running system
+.PHONY: run-smoke-tests
+run-smoke-tests: start-locally
+	@echo "Run smoke tests"
+	@java -jar ./itests/target/itests-0.0.1-SNAPSHOT.jar
+	@echo "Finished running smoke tests"
