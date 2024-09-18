@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.roko.dls.dto.LockRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,15 @@ public class RESTSublockClientTest {
     @Mock
     private RestTemplate restTemplateMock;
 
+    private LockRequest request;
+
     private SublockClient client;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+
+        request = new LockRequest(System.currentTimeMillis());
 
         client = new RESTSublockClient(restTemplateMock);
     }
@@ -43,11 +48,31 @@ public class RESTSublockClientTest {
     }
 
     @Test
+    public void lockWithRequestReturnsOK_whenServerReturns200() {
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, request, String.class))
+                .thenReturn(ResponseEntity.ok().build());
+
+        LockResult lockResult = client.lock(TEST_ID, request);
+
+        assertEquals(LockResult.OK, lockResult);
+    }
+
+    @Test
     public void lockReturnsAlreadyLocked_whenServerReturns4xx() {
         when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, TEST_ID, String.class))
                 .thenReturn(ResponseEntity.badRequest().build());
 
         LockResult lockResult = client.lock(TEST_ID);
+
+        assertEquals(LockResult.ALREADY_LOCKED, lockResult);
+    }
+
+    @Test
+    public void lockWithRequestReturnsAlreadyLocked_whenServerReturns4xx() {
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, request, String.class))
+                .thenReturn(ResponseEntity.badRequest().build());
+
+        LockResult lockResult = client.lock(TEST_ID, request);
 
         assertEquals(LockResult.ALREADY_LOCKED, lockResult);
     }
@@ -63,6 +88,16 @@ public class RESTSublockClientTest {
     }
 
     @Test
+    public void lockWithRequestReturnsLockFailed_whenServerReturns5xx() {
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, request, String.class))
+                .thenReturn(ResponseEntity.status(500).build());
+
+        LockResult lockResult = client.lock(TEST_ID, request);
+
+        assertEquals(LockResult.LOCK_FAILED, lockResult);
+    }
+
+    @Test
     public void lockReturnsAlreadyLocked_whenClientThrowsHttpClientErrorException() {
         when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, TEST_ID, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatusCode.valueOf(400)));
@@ -73,11 +108,31 @@ public class RESTSublockClientTest {
     }
 
     @Test
+    public void lockWithRequestReturnsAlreadyLocked_whenClientThrowsHttpClientErrorException() {
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, request, String.class))
+                .thenThrow(new HttpClientErrorException(HttpStatusCode.valueOf(400)));
+
+        LockResult lockResult = client.lock(TEST_ID, request);
+
+        assertEquals(LockResult.ALREADY_LOCKED, lockResult);
+    }
+
+    @Test
     public void lockReturnsLockFailed_whenClientThrowsHttpServerErrorException(){
         when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, TEST_ID, String.class))
                 .thenThrow(new HttpServerErrorException(HttpStatusCode.valueOf(500)));
 
         LockResult lockResult = client.lock(TEST_ID);
+
+        assertEquals(LockResult.LOCK_FAILED, lockResult);
+    }
+
+    @Test
+    public void lockWithRequestReturnsLockFailed_whenClientThrowsHttpServerErrorException(){
+        when(restTemplateMock.postForEntity(SUBLOCK_URL + TEST_ID, request, String.class))
+                .thenThrow(new HttpServerErrorException(HttpStatusCode.valueOf(500)));
+
+        LockResult lockResult = client.lock(TEST_ID, request);
 
         assertEquals(LockResult.LOCK_FAILED, lockResult);
     }

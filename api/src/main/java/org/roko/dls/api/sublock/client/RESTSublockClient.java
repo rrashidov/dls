@@ -1,5 +1,6 @@
 package org.roko.dls.api.sublock.client;
 
+import org.roko.dls.dto.LockRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
@@ -18,6 +19,27 @@ public class RESTSublockClient implements SublockClient {
     public LockResult lock(String id) {
         try {
             ResponseEntity<String> response = restClient.postForEntity("/api/v1/sublock/" + id, id, String.class);
+
+            if (response.getStatusCode().is4xxClientError()) {
+                return LockResult.ALREADY_LOCKED;
+            }
+    
+            if (response.getStatusCode().is5xxServerError()) {
+                return LockResult.LOCK_FAILED;
+            }
+    
+            return LockResult.OK;    
+        } catch (HttpClientErrorException e) {
+            return LockResult.ALREADY_LOCKED;
+        } catch (HttpServerErrorException e) {
+            return LockResult.LOCK_FAILED;
+        }
+    }
+
+    @Override
+    public LockResult lock(String id, LockRequest request) {
+        try {
+            ResponseEntity<String> response = restClient.postForEntity("/api/v1/sublock/" + id, request, String.class);
 
             if (response.getStatusCode().is4xxClientError()) {
                 return LockResult.ALREADY_LOCKED;
