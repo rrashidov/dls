@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 import org.roko.dls.client.DLSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 //@Component
 public class ProlongedTestRunner implements CommandLineRunner {
