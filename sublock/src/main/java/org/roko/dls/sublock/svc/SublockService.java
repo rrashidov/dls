@@ -21,7 +21,7 @@ public class SublockService {
     }
 
     public LockResult lock(String id) {
-        synchronized(id){
+        synchronized(id.intern()){
             try {
                 Optional<Sublock> sublockOptional = repo.findById(id);
 
@@ -40,7 +40,7 @@ public class SublockService {
     }
 
     public UnlockResult unlock(String id){
-        synchronized(id){
+        synchronized(id.intern()){
             try {
                 Optional<Sublock> sublockOptional = repo.findById(id);
 
