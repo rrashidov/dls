@@ -190,6 +190,8 @@ services:
       - core
   final:
     image: busybox
+    networks: 
+      - my-shared-network
     depends_on:
       api:
         condition: service_healthy
